@@ -1,39 +1,32 @@
-"use client"
+"use client";
 
-import Navbar from '@/components/Navbar'
-import { NAVBAR_HEIGHT } from '@/lib/constants'
-import { useGetAuthUserQuery } from '@/state/api'
-import { usePathname, useRouter } from 'next/navigation'
+import Navbar from "@/components/Navbar";
+import { NAVBAR_HEIGHT } from "@/lib/constants";
+import { useGetAuthUserQuery } from "@/state/api";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
-import React, { useEffect, useState } from 'react'
-
-const Layout = ({children} : {children: React.ReactNode}) => {
-  const {data: authUser, isLoading: authLoading   } = useGetAuthUserQuery();
-  console.log('authUser: ', authUser)
+const Layout = ({ children }: { children: React.ReactNode }) => {
+  const { data: authUser, isLoading: authLoading } = useGetAuthUserQuery();
   const router = useRouter();
   const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if(authUser) {
-      const userRole = authUser.userRole.toLowerCase();
+    if (authUser) {
+      const userRole = authUser.userRole?.toLowerCase();
       if (
         (userRole === "manager" && pathname.startsWith("/search")) ||
-        (userRole === "tenant" && pathname === "/")
+        (userRole === "manager" && pathname === "/")
       ) {
-        router.push(
-          "/managers/properties",
-          {scroll: false}
-        ) 
+        router.push("/managers/properties", { scroll: false });
       } else {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    } 
-  }, [authUser, pathname, router])
+    }
+  }, [authUser, router, pathname]);
 
-  if (authLoading || isLoading) return <>Loading...</>
-  if(!authUser?.userRole) return null;  
-
+  if (authLoading || isLoading) return <>Loading...</>;
 
   return (
     <div className="h-full w-full">
@@ -45,7 +38,7 @@ const Layout = ({children} : {children: React.ReactNode}) => {
         {children}
       </main>
     </div>
-  )
-}
+  );
+};
 
 export default Layout;

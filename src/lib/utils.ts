@@ -86,3 +86,10 @@ export const createNewUserInDatabase = async (
 
   return createUserResponse;
 };
+
+export function formatRupiahValue(value: number | undefined, isMin: boolean) {
+  if (!value || value === 0) return isMin ? "Min Berapapun" : "Max Berapapun";
+  if (value < 1_000_000) return `Rp${value / 1_000}rb`;
+  return `Rp${(value / 1_000_000).toFixed(0)}jt`;
+}
+
