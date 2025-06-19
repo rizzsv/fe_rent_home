@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { debounce } from "lodash";
-import { cleanParams, cn, formatPriceValue, formatRupiahValue } from "@/lib/utils";
+import { cleanParams, cn, formatPriceValue } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Filter, Grid, List, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -130,53 +130,52 @@ const FiltersBar = () => {
           </Button>
         </div>
 
-{/* Rentang Harga (Rupiah) */}
-<div className="flex gap-1">
-  {/* Harga Minimum */}
-  <Select
-    value={filters.priceRange[0]?.toString() || "any"}
-    onValueChange={(value) =>
-      handleFilterChange("priceRange", value, true)
-    }
-  >
-    <SelectTrigger className="w-28 rounded-xl border-primary-400">
-      <SelectValue>
-        {formatRupiahValue(filters.priceRange[0] ?? undefined, true)}
-      </SelectValue>
-    </SelectTrigger>
-    <SelectContent className="bg-white">
-      <SelectItem value="any">Min Berapapun</SelectItem>
-      {[500_000, 1_000_000, 2_000_000, 5_000_000, 10_000_000].map((price) => (
-        <SelectItem key={price} value={price.toString()}>
-          Rp{(price / 1_000_000).toFixed(price < 1_000_000 ? 1 : 0)}{price < 1_000_000 ? "rb+" : "jt+"}
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
+        {/* Price Range */}
+        <div className="flex gap-1">
+          {/* Minimum Price Selector */}
+          <Select
+            value={filters.priceRange[0]?.toString() || "any"}
+            onValueChange={(value) =>
+              handleFilterChange("priceRange", value, true)
+            }
+          >
+            <SelectTrigger className="w-22 rounded-xl border-primary-400">
+              <SelectValue>
+                {formatPriceValue(filters.priceRange[0], true)}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent className="bg-white">
+              <SelectItem value="any">Any Min Price</SelectItem>
+              {[500, 1000, 1500, 2000, 3000, 5000, 10000].map((price) => (
+                <SelectItem key={price} value={price.toString()}>
+                  ${price / 1000}k+
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-  {/* Harga Maksimum */}
-  <Select
-    value={filters.priceRange[1]?.toString() || "any"}
-    onValueChange={(value) =>
-      handleFilterChange("priceRange", value, false)
-    }
-  >
-    <SelectTrigger className="w-28 rounded-xl border-primary-400">
-      <SelectValue>
-        {formatRupiahValue(filters.priceRange[1] ?? undefined, false)}
-      </SelectValue>
-    </SelectTrigger>
-    <SelectContent className="bg-white">
-      <SelectItem value="any">Max Berapapun</SelectItem>
-      {[1_000_000, 2_000_000, 5_000_000, 10_000_000, 20_000_000].map((price) => (
-        <SelectItem key={price} value={price.toString()}>
-          &lt; Rp{(price / 1_000_000).toFixed(0)}jt
-        </SelectItem>
-      ))}
-    </SelectContent>
-  </Select>
-</div>
-
+          {/* Maximum Price Selector */}
+          <Select
+            value={filters.priceRange[1]?.toString() || "any"}
+            onValueChange={(value) =>
+              handleFilterChange("priceRange", value, false)
+            }
+          >
+            <SelectTrigger className="w-22 rounded-xl border-primary-400">
+              <SelectValue>
+                {formatPriceValue(filters.priceRange[1], false)}
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent className="bg-white">
+              <SelectItem value="any">Any Max Price</SelectItem>
+              {[1000, 2000, 3000, 5000, 10000].map((price) => (
+                <SelectItem key={price} value={price.toString()}>
+                  &lt;${price / 1000}k
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         {/* Beds and Baths */}
         <div className="flex gap-1">
