@@ -14,6 +14,7 @@ import Listings from "./Listings";
 
 const SearchPage = () => {
   const searchParams = useSearchParams();
+  console.log("searchParams", searchParams.toString());
   const dispatch = useAppDispatch();
   const isFiltersFullOpen = useAppSelector(
     (state) => state.global.isFiltersFullOpen

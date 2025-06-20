@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/select";
 import { PropertyTypeIcons } from "@/lib/constants";
 
+
+
 const FiltersBar = () => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -78,7 +80,7 @@ const FiltersBar = () => {
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
           searchInput
         )}.json?access_token=${
-          process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+          process.env.NEXT_PUBLIC_MAPBOX_ACCES_TOKEN
         }&fuzzyMatch=true`
       );
       const data = await response.json();
